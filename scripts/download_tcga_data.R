@@ -55,7 +55,24 @@ cat("Methylation samples pulled:", ncol(methyl_data), "\n")
 
 # STEP 4: Somatic mutations (MAF)
 
-maf_data <- GDCquery_Maf(tumor = "HNSC", pipelines = "mutect2")
+query_maf <- GDCquery(
+  project = "TCGA-HNSC",
+  data.category = "Simple Nucleotide Variation",
+  data.type = "Masked Somatic Mutation",
+  workflow.type = "Aliquot Ensemble Somatic Variant Merging and Masking"
+)
+
+GDCdownload(
+  query_maf,
+  method = "api",
+  files.per.chunk = 5,
+  directory = GDC_DATA_DIR
+)
+
+maf_data <- GDCprepare(
+  query_maf,
+  directory = GDC_DATA_DIR
+)
 
 saveRDS(maf_data, file.path("data/raw/tcga/mutation", "mutation_raw.rds"))
 cat("Mutation records pulled:", nrow(maf_data), "\n")
