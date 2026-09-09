@@ -1,2 +1,24 @@
 #temp files
 tmp/
+
+# R / R-studio
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+.Rproj.user/
+*.Rproj.user/
+
+# R packages
+*.rds
+renv/*
+MANIFEST.txt
+
+#data
+data/*
+
+# Large downloaded archives
+*.tar
+*.tar.gz
+*.zip
+*.gz
