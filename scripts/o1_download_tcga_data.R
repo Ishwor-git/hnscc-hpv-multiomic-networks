@@ -7,6 +7,9 @@
 
 library(TCGAbiolinks)
 library(SummarizedExperiment)
+library(httr)
+library(jsonlite)
+
 
 GDC_DATA_DIR <- "data/raw/tcga"
 dir.create(GDC_DATA_DIR, recursive = TRUE, showWarnings = FALSE)
@@ -76,5 +79,10 @@ maf_data <- GDCprepare(
 
 saveRDS(maf_data, file.path("data/raw/tcga/mutation", "mutation_raw.rds"))
 cat("Mutation records pulled:", nrow(maf_data), "\n")
+
+resp <- GET("https://www.cbioportal.org/api/studies/hnsc_tcga_pub/clinical-data?clinicalDataType=PATIENT&projection=SUMMARY")
+clin_cbio <- fromJSON(content(resp, "text", encoding = "UTF-8"))
+
+unique(clin_cbio$clinicalAttributeId[grepl("HPV", clin_cbio$clinicalAttributeId, ignore.case = TRUE)])
 
 cat("\nDone. Raw .rds files saved under data/raw/tcga/{expression,methylation,mutation,clinical}/\n")
