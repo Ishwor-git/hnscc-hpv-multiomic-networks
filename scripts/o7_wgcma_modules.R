@@ -76,9 +76,17 @@ moduleTraitCor <- cor(MEs, trait_data, use = "p")
 moduleTraitP   <- corPvalueStudent(moduleTraitCor, nrow(datExpr))
 
 cat("\nModule-trait correlation with HPV status:\n")
-print(round(data.frame(module = rownames(moduleTraitCor),
-                        cor_hpv = moduleTraitCor[, "hpv_status"],
-                        p_hpv = moduleTraitP[, "hpv_status"]), 4))
+
+hpv_results <- data.frame(
+  module = rownames(moduleTraitCor),
+  cor_hpv = moduleTraitCor[, "hpv_status"],
+  p_hpv = moduleTraitP[, "hpv_status"]
+)
+
+hpv_results$cor_hpv <- round(hpv_results$cor_hpv, 4)
+hpv_results$p_hpv <- round(hpv_results$p_hpv, 4)
+
+print(hpv_results)
 
 sig_modules <- rownames(moduleTraitCor)[abs(moduleTraitCor[, "hpv_status"]) >= 0.25 &
                                           moduleTraitP[, "hpv_status"] <= 0.001]
